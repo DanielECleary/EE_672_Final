@@ -10,8 +10,29 @@ int scissors = 1;
 int roles = 3;
 int rolesmod = 0; // modified value for roles based on found patterns
 
+// probabilities for the three choices
+float rchance = 0.0;
+float pchance = 0.0;
+float schance = 0.0;
+float probchoice = 0.0; // this is the value we erference for each run of the game, equals probability func
+
 string choice = "";
 string history[3] = {"", "", ""};
+
+float probability(){ // random probability generator
+    float num = rand();
+    while ( num >= 1.0e+9){ // reroll if number is too high
+        num = rand();
+    }
+    if (num <= 0) // rand picked a negative number
+        num *= -1;
+    int n = 10;
+    while (num/n >= 1.0){
+        n *= 10; // keep dividing by 10^i until we get a value between 0 and 1, where i is the number of runs
+    }
+    float prob = num/n;
+    return prob;
+}
 
 int main(){
     cout << "Welcome to a Rock Paper Scissors Bot!" << endl;
@@ -37,6 +58,9 @@ int main(){
             history[2] = history[1]; // keep track of history
             history[1] = history[0];
             history[0] = choice;
+            
+            //set probability for the stage
+            probchoice = probability();
         }
         cout << "Please enter r for rock, p for paper, or s for scissors. To end the game, type end: "; // repeat loop
         cin >> choice;
