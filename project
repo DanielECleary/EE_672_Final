@@ -8,6 +8,7 @@ int rock = 1;
 int paper = 1;
 int scissors = 1;
 int roles = 3;
+int rolesmod = 0; // modified value for roles based on found patterns
 
 string choice = "";
 string history[3] = {"", "", ""};
