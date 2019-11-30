@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// set up intial weights
+int rock = 1;
+int paper = 1;
+int scissors = 1;
+int roles = 3;
+
+string choice = "";
+string history[3] = {"", "", ""};
+
+int main(){
+    cout << "Welcome to a Rock Paper Scissors Bot!" << endl;
+    cout << "Please enter r for rock, p for paper, or s for scissors. To end the game, type end: ";
+    cin >> choice;
+    while (choice != "end"){ // until the chose end play the game
+        if (choice != "r" && choice != "p" && choice != "s"){ // failed to pick proper role
+            cout << "invalid choice" << endl;
+        }
+        else{ // game is played
+            if (choice == "r"){ //update rock and roles
+                rock ++;
+                roles++;
+            }
+            if (choice == "p"){ // update paper and roles
+                paper ++;
+                roles++;
+            }
+            if (choice == "s"){ // update scissors and roles
+                scissors ++;
+                roles++;
+            }
+            history[2] = history[1]; // keep track of history
+            history[1] = history[0];
+            history[0] = choice;
+        }
+        cout << "Please enter r for rock, p for paper, or s for scissors. To end the game, type end: "; // repeat loop
+        cin >> choice;
+    }
+    cout << "Thanks for playing!";
+    return 0;
+}
