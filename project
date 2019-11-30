@@ -8,8 +8,11 @@ int rock = 1;
 int paper = 1;
 int scissors = 1;
 int roles = 3;
-int rolesmod = 0; // modified value for roles based on found patterns
-
+// modified value for roles based on found patterns, default to 0 and changed as needed
+int rmod = 0;
+int pmod = 0;
+inte smod = 0;
+int rolesmod = 0;
 // probabilities for the three choices
 float rchance = 0.0;
 float pchance = 0.0;
