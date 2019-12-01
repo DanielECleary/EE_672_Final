@@ -21,6 +21,7 @@ float rchance = 0.0;
 float pchance = 0.0;
 float schance = 0.0;
 float probchoice = 0.0; // this is the value we reference for each run of the game, equals probability func
+float strathistory = 0.0; // holds last probability for use in the history component if needed
 
 string choice = "";
 string botchoice = "";
