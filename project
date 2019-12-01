@@ -11,17 +11,25 @@ int rock = 1;
 int paper = 1;
 int scissors = 1;
 int roles = 3;
+// initial weights for history probability choices
+int rsp = 1;
+int sss = 1;
+int ssc = 1;
+int rsproles = 2;
+int sssroles = 2;
 // modified value for roles based on found patterns, default to 0 and changed as needed
 int rmod = 0;
 int pmod = 0;
 int smod = 0;
-int rolesmod = 0;
+//modifiers for history based probabilities
 // probabilities for the three choices
 float rchance = 0.0;
 float pchance = 0.0;
 float schance = 0.0;
 float probchoice = 0.0; // this is the value we reference for each run of the game, equals probability func
 float strathistory = 0.0; // holds last probability for use in the history component
+float rspchance = 0.0;
+float ssschance = 0.0;
 
 string choice = "";
 string botchoice = "";
@@ -42,7 +50,6 @@ float probability(){ // random probability generator
     while (num/n >= 1.0){
         n *= 10; // keep dividing by 10^i until we get a value between 0 and 1, where i is the number of runs
     }
-    cout << num/n << endl;
     return num/n;
 }
 
@@ -51,6 +58,10 @@ int main(){
     cout << "Please enter r for rock, p for paper, or s for scissors. To end the game, type end: ";
     cin >> choice;
     while (choice != "end"){ // until the chose end play the game
+        //reset modifier values at the start of each game
+        rmod = 0;
+        pmod = 0;
+        smod = 0;
         if (choice != "r" && choice != "p" && choice != "s"){ // failed to pick proper role
             cout << "invalid choice" << endl;
         }
@@ -74,20 +85,57 @@ int main(){
             history[0] = choice; // newest choice
             
             // check history to determine mod values
-            // rock, scissors, paper strat
+            // rock, scissors, paper strat, pattern was seen so increase chance of modifying to chose the last one seen
+            if (history[2] == "r" && history[1] == "s" && history[0] == "p"){ // rsp occured
+                rsp ++;
+                rsproles ++;
+            }
+            if (history[2] == "r" && history[1] == "s" && history[0] != "p"){ // rss or rsr occured
+                rsproles ++;
+            }
+            if (history[2] == "s" && history[1] == "p" && history[0] == "r"){ // spr occured
+                rsp ++;
+                rsproles ++;
+            }
+            if (history[2] == "s" && history[1] == "p" && history[0] != "r"){ // sps or spp occured
+                rsproles ++;
+            }
+            if (history[2] == "p" && history[1] == "r" && history[0] == "s"){ // prs occured
+                rsp ++;
+                rsproles ++;
+            }
+            if (history[2] == "p" && history[1] == "r" && history[0] != "s"){ // prp or prr occured
+                rsproles ++;
+            }
+            rspchance = rsp / rsproles; // set probability choice for rsp strat
+            // random determine chance range that it picks the value
+            if (history[1] == "r" && history[0] == "p"){ // increase s chance
+                if (strathistory > 0.0 && strathistory <= rspchance){
+                    smod = 4;
+                }
+            }
+            if (history[1] == "p" && history[0] == "s"){ // increase r chance
+                if (strathistory > 0.0 && strathistory <= rspchance){
+                    rmod = 4;
+                }
+            }
+            if (history[1] == "s" && history[0] == "r"){ // increase p chance
+                if (strathistory > 0.0 && strathistory <= rspchance){
+                    pmod = 4;
+                }
+            }
+            // same, same, same strat vs same, same, counter strat
             
-            // same, same, same strat
-            
-            // same, same counter strat
             
             //set probability for the stage and modified probabilites based on history
             probchoice = probability();
+            strathistory = probchoice;
             rchance = (rock + rmod) / (roles + rmod);
             pchance = (paper + pmod) / (roles + pmod);
             schance = (scissors + smod) / (roles + smod);
             
             // bot choices
-            if (probchoice > 0 && probchoice <= rchance){ // bot picks rock
+            if (probchoice > 0.0 && probchoice <= rchance){ // bot picks rock
                 botchoice = "r";
             }
             if (probchoice > rchance && probchoice <= rchance + pchance){ // bot picks paper
