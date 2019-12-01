@@ -111,17 +111,17 @@ int main(){
             // random determine chance range that it picks the value
             if (history[1] == "r" && history[0] == "p"){ // increase s chance
                 if (strathistory > 0.0 && strathistory <= rspchance){
-                    smod = 4;
+                    smod = 2 * roles;
                 }
             }
             if (history[1] == "p" && history[0] == "s"){ // increase r chance
                 if (strathistory > 0.0 && strathistory <= rspchance){
-                    rmod = 4;
+                    rmod = 2 * roles;
                 }
             }
             if (history[1] == "s" && history[0] == "r"){ // increase p chance
                 if (strathistory > 0.0 && strathistory <= rspchance){
-                    pmod = 4;
+                    pmod = 2 * roles;
                 }
             }
             // same, same, same strat vs same, same, counter strat
