@@ -85,7 +85,8 @@ int main(){
             history[0] = choice; // newest choice
             
             // check history to determine mod values
-            // rock, scissors, paper strat, pattern was seen so increase chance of modifying to chose the last one seen
+            // rock, scissors, paper strat
+            // if we see the pattern, increase chance of picking a counter to the last move, else increase chance of going away from it
             if (history[2] == "r" && history[1] == "s" && history[0] == "p"){ // rsp occured
                 rsp ++;
                 rsproles ++;
@@ -109,19 +110,19 @@ int main(){
             }
             rspchance = rsp / rsproles; // set probability choice for rsp strat
             // random determine chance range that it picks the value
-            if (history[1] == "r" && history[0] == "p"){ // increase s chance
-                if (strathistory > 0.0 && strathistory <= rspchance){
-                    smod = 2 * roles;
-                }
-            }
-            if (history[1] == "p" && history[0] == "s"){ // increase r chance
+            if (history[1] == "r" && history[0] == "p"){ // player likely to choose s, pick r
                 if (strathistory > 0.0 && strathistory <= rspchance){
                     rmod = 2 * roles;
                 }
             }
-            if (history[1] == "s" && history[0] == "r"){ // increase p chance
+            if (history[1] == "p" && history[0] == "s"){ // player likely to choose r, pick p
                 if (strathistory > 0.0 && strathistory <= rspchance){
-                    pmod = 2 * roles;
+                    mod = 2 * roles;
+                }
+            }
+            if (history[1] == "s" && history[0] == "r"){ // player likely to choose p, pick s
+                if (strathistory > 0.0 && strathistory <= rspchance){
+                    smod = 2 * roles;
                 }
             }
             // same, same, same strat vs same, same, counter strat
