@@ -21,7 +21,7 @@ float rchance = 0.0;
 float pchance = 0.0;
 float schance = 0.0;
 float probchoice = 0.0; // this is the value we reference for each run of the game, equals probability func
-float strathistory = 0.0; // holds last probability for use in the history component if needed
+float strathistory = 0.0; // holds last probability for use in the history component
 
 string choice = "";
 string botchoice = "";
@@ -69,12 +69,16 @@ int main(){
             }
             
             // keep track of history
-            history[2] = history[1];
+            history[2] = history[1]; // oldest choice
             history[1] = history[0];
-            history[0] = choice;
+            history[0] = choice; // newest choice
             
             // check history to determine mod values
+            // rock, scissors, paper strat
             
+            // same, same, same strat
+            
+            // same, same counter strat
             
             //set probability for the stage and modified probabilites based on history
             probchoice = probability();
@@ -83,10 +87,10 @@ int main(){
             schance = (scissors + smod) / (roles + smod);
             
             // bot choices
-            if (procchoice > 0 && probchoice <= rchance){ // bot picks rock
+            if (probchoice > 0 && probchoice <= rchance){ // bot picks rock
                 botchoice = "r";
             }
-            if (procchoice > rchance && probchoice <= rchance + pchance){ // bot picks paper
+            if (probchoice > rchance && probchoice <= rchance + pchance){ // bot picks paper
                 botchoice = "p";
             }
             if (probchoice > rchance + pchance && probchoice <= rchance + pchance + schance){ // bot picks scissors
@@ -94,15 +98,34 @@ int main(){
             }
             
             // determine outcome of game
-            if (pchoice == "r" && bchoice == "p" || pchoice = "p" && bchoice == "s" || pchoice == "s" && bchoice == "r"){ // bot wins
+            // bot wins
+            if (choice == "r" && botchoice == "p"){
                 cout << "The bot wins!" << endl;
                 botwins ++;
             }
-            if (pchoice == "r" && bchoice == "s" || pchoice = "p" && bchoice == "r" || pchoice == "s" && bchoice == "p"){ // player wins
+            if (choice == "p" && botchoice == "s"){
+                cout << "The bot wins!" << endl;
+                botwins ++;    
+            }
+            if (choice == "s" && botchoice == "r"){
+                cout << "The bot wins!" << endl;
+                botwins ++;
+            }
+            // player wins
+            if (choice == "r" && botchoice == "s"){
                 cout << "You win!" << endl;
                 playerwins++;
             }
-            if (pchoice == bchoice){ // tie
+            if (choice == "p" && botchoice == "r"){
+                cout << "You win!" << endl;
+                playerwins++;
+            }
+            if (choice == "s" && botchoice == "p"){
+                cout << "You win!" << endl;
+                playerwins++;
+            }
+            // tie
+            if (choice == botchoice){
                 cout << "Draw!" << endl;
             }
         }
