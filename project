@@ -3,8 +3,8 @@
 
 using namespace std;
 
-// TO DO: statements to determine bot choices, tatements to determine if the modifiers are needed based
-// on history, output for if you win/ lose, way to tracks wins and losses
+// TODO: Statements to determine if the modifiers are needed based
+// on history, output for if you win/lose, way to tracks wins and losses
 
 // set up intial weights
 int rock = 1;
@@ -20,10 +20,15 @@ int rolesmod = 0;
 float rchance = 0.0;
 float pchance = 0.0;
 float schance = 0.0;
-float probchoice = 0.0; // this is the value we erference for each run of the game, equals probability func
+float probchoice = 0.0; // this is the value we reference for each run of the game, equals probability func
 
 string choice = "";
+string botchoice = "";
 string history[3] = {"", "", ""};
+
+// keep trakc sof player vs bot wins
+int botwins = 0;
+int playerwins = 0;
 
 float probability(){ // random probability generator
     float num = rand();
@@ -61,12 +66,44 @@ int main(){
                 scissors ++;
                 roles++;
             }
-            history[2] = history[1]; // keep track of history
+            
+            // keep track of history
+            history[2] = history[1];
             history[1] = history[0];
             history[0] = choice;
             
-            //set probability for the stage
+            // check history to determine mod values
+            
+            
+            //set probability for the stage and modified probabilites based on history
             probchoice = probability();
+            rchance = (rock + rmod) / (roles + rmod);
+            pchance = (paper + pmod) / (roles + pmod);
+            schance = (scissors + smod) / (roles + smod);
+            
+            // bot choices
+            if (procchoice > 0 && probchoice <= rchance){ // bot picks rock
+                botchoice = "r";
+            }
+            if (procchoice > rchance && probchoice <= rchance + pchance){ // bot picks paper
+                botchoice = "p";
+            }
+            if (probchoice > rchance + pchance && probchoice <= rchance + pchance + schance){ // bot picks scissors
+               botchoice = "s"; 
+            }
+            
+            // determine outcome of game
+            if (pchoice == "r" && bchoice == "p" || pchoice = "p" && bchoice == "s" || pchoice == "s" && bchoice == "r"){ // bot wins
+                cout << "The bot wins!" << endl;
+                botwins ++;
+            }
+            if (pchoice == "r" && bchoice == "s" || pchoice = "p" && bchoice == "r" || pchoice == "s" && bchoice == "p"){ // player wins
+                cout << "You win!" << endl;
+                playerwins++;
+            }
+            if (pchoice == bchoice){ // tie
+                cout << "Draw!" << endl;
+            }
         }
         cout << "Please enter r for rock, p for paper, or s for scissors. To end the game, type end: "; // repeat loop
         cin >> choice;
