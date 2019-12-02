@@ -197,14 +197,14 @@ int main(){
             schance = (scissors + smod) / (roles + smod);
             cout << rchance << endl;
             // bot choices
-            if (probchoice > 0.0 && probchoice <= rchance){ // bot picks rock
-                botchoice = "r";
-            }
-            if (probchoice > rchance && probchoice <= rchance + pchance){ // bot picks paper
+            if (probchoice > 0.0 && probchoice <= rchance){ // player has increased chance for rock, pick paper
                 botchoice = "p";
             }
-            if (probchoice > rchance + pchance && probchoice <= rchance + pchance + schance){ // bot picks scissors
-               botchoice = "s";
+            if (probchoice > rchance && probchoice <= rchance + pchance){ // player has increased chance for paper, pick scissors
+                botchoice = "s";
+            }
+            if (probchoice > rchance + pchance && probchoice <= rchance + pchance + schance){ // player has increased chance for scissors, pick rock
+               botchoice = "r";
             }
             
             // determine outcome of game
