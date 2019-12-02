@@ -16,7 +16,7 @@ int rsp = 1;
 int sss = 1;
 int ssc = 1;
 int rsproles = 2;
-int sssroles = 2;
+int sssroles = 3;
 // modified value for roles based on found patterns, default to 0 and changed as needed
 int rmod = 0;
 int pmod = 0;
@@ -27,15 +27,16 @@ float rchance = 0.0;
 float pchance = 0.0;
 float schance = 0.0;
 float probchoice = 0.0; // this is the value we reference for each run of the game, equals probability func
-float strathistory = 0.0; // holds last probability for use in the history component
+float strathistory[2] = {0.0, 0.0}; // holds last two probabilitys for use in the history component
 float rspchance = 0.0;
 float ssschance = 0.0;
+float sscchance = 0.0;
 
 string choice = "";
 string botchoice = "";
-string history[3] = {"", "", ""};
+string history[3] = {"a", "b", "c"}; // prevents uneccesary history checks until 3rd move is completed
 
-// keep trakc sof player vs bot wins
+// keeps track of player vs bot wins
 int botwins = 0;
 int playerwins = 0;
 
@@ -109,28 +110,88 @@ int main(){
                 rsproles ++;
             }
             rspchance = rsp / rsproles; // set probability choice for rsp strat
-            // random determine chance range that it picks the value
+            // randomly determine chance range that it picks the value
             if (history[1] == "r" && history[0] == "p"){ // player likely to choose s, pick r
-                if (strathistory > 0.0 && strathistory <= rspchance){
+                if (strathistory[1] > 0.0 && strathistory[1] <= rspchance){
                     rmod = 2 * roles;
                 }
             }
             if (history[1] == "p" && history[0] == "s"){ // player likely to choose r, pick p
-                if (strathistory > 0.0 && strathistory <= rspchance){
-                    mod = 2 * roles;
+                if (strathistory[1] > 0.0 && strathistory[1] <= rspchance){
+                    pmod = 2 * roles;
                 }
             }
             if (history[1] == "s" && history[0] == "r"){ // player likely to choose p, pick s
-                if (strathistory > 0.0 && strathistory <= rspchance){
+                if (strathistory[1] > 0.0 && strathistory[1] <= rspchance){
                     smod = 2 * roles;
                 }
             }
             // same, same, same strat vs same, same, counter strat
-            
+            if (history[2] == history[1]){ // begin to see same same strat
+                // same same same conditions
+                if (history[2] == history[0]){
+                    ssschance ++;
+                    sssroles ++;
+                }
+                // same same counter conditions, as in the player throws same, same, then what it counters to beat its counter (conditioned response)
+                if (history[2] == "r" && history [0] == "s"){ //rrs
+                    ssc ++;
+                    sssroles ++;
+                }
+                if (history[2] == "s" && history [0] == "p"){ //ssp
+                    ssc ++;
+                    sssroles ++;
+                }
+                if (history[2] == "p" && history [0] == "r"){ //ppr
+                    ssc ++;
+                    sssroles ++;
+                }
+            }
+            ssschance = sss / sssroles; // range for sss
+            sscchance = ssc / sssroles; // range for ssc
+            // ssc + sss will give starting range for same same countered
+            // randomly determine chance that the bot is more likely to pick based on same same same strat conditions
+            if (history[1] == history[0]){ // begin condition
+                if (history[1] == "r"){ // player used rr
+                    if (strathistory[0] > 0.0 && strathistory[0] <= ssschance){ // player will through rrr, pick p
+                        pmod = 2 * roles;
+                    }
+                    if (strathistory[0] > ssschance && strathistory[0] <= ssschance + sscchance){ // player will throw rrs, pick r
+                        rmod = 2 * roles;
+                    }
+                    //third option exists in the event the do not pick according to sss or ssc at any point
+                    if (strathistory[0] > ssschance + sscchance && strathistory[0] <= 1){ // player will throw rrp, pick s
+                        smod = 2 * roles;
+                    }
+                }
+                if (history[1] == "s"){ // player used ss
+                    if (strathistory[0] > 0.0 && strathistory[0] <= ssschance){ // player will through sss, pick r
+                        rmod = 2 * roles;
+                    }
+                    if (strathistory[0] > ssschance && strathistory[0] <= ssschance + sscchance){ // player will throw ssp, pick s
+                        smod = 2 * roles;
+                    }
+                    if (strathistory[0] > ssschance + sscchance && strathistory[0] <= 1){ // player will throw ssr, pick p
+                        pmod = 2 * roles;
+                    }
+                }
+                if (history[1] == "p"){ // player used pp
+                    if (strathistory[0] > 0.0 && strathistory[0] <= ssschance){ // player will through ppp, pick s
+                        smod = 2 * roles;
+                    }
+                    if (strathistory[0] > ssschance && strathistory[0] <= ssschance + sscchance){ // player will throw ppr, pick p
+                        pmod = 2 * roles;
+                    }
+                    if (strathistory[0] > ssschance + sscchance && strathistory[0] <= 1){ // player will throw pps, pick r
+                        rmod = 2 * roles;
+                    }
+                }
+            }
             
             //set probability for the stage and modified probabilites based on history
             probchoice = probability();
-            strathistory = probchoice;
+            strathistory[1] = strathistory[0];
+            strathistory[0] = probchoice;
             rchance = (rock + rmod) / (roles + rmod);
             pchance = (paper + pmod) / (roles + pmod);
             schance = (scissors + smod) / (roles + smod);
