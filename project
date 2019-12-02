@@ -7,20 +7,20 @@ using namespace std;
 // on history, output for if you win/lose, way to tracks wins and losses
 
 // set up intial weights
-int rock = 1;
-int paper = 1;
-int scissors = 1;
-int roles = 3;
+float rock = 1.0;
+float paper = 1.0;
+float scissors = 1.0;
+float roles = 3.0;
 // initial weights for history probability choices
-int rsp = 1;
-int sss = 1;
-int ssc = 1;
-int rsproles = 2;
-int sssroles = 3;
+float rsp = 1.0;
+float sss = 1.0;
+float ssc = 1.0;
+float rsproles = 2.0;
+float sssroles = 3.0;
 // modified value for roles based on found patterns, default to 0 and changed as needed
-int rmod = 0;
-int pmod = 0;
-int smod = 0;
+float rmod = 0.0;
+float pmod = 0.0;
+float smod = 0.0;
 //modifiers for history based probabilities
 // probabilities for the three choices
 float rchance = 0.0;
@@ -195,7 +195,7 @@ int main(){
             rchance = (rock + rmod) / (roles + rmod);
             pchance = (paper + pmod) / (roles + pmod);
             schance = (scissors + smod) / (roles + smod);
-            
+            cout << rchance << endl;
             // bot choices
             if (probchoice > 0.0 && probchoice <= rchance){ // bot picks rock
                 botchoice = "r";
@@ -204,7 +204,7 @@ int main(){
                 botchoice = "p";
             }
             if (probchoice > rchance + pchance && probchoice <= rchance + pchance + schance){ // bot picks scissors
-               botchoice = "s"; 
+               botchoice = "s";
             }
             
             // determine outcome of game
