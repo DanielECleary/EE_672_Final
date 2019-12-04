@@ -239,6 +239,7 @@ int main(){
         cin >> choice;
     }
     cout << "Thanks for playing! Here are some game stats:" << endl;
-    cout << "Bot wins: " << botwins << endl << "Player wins: " << playerwins << endl << "Total games: " << roles - 3 << endl << "Number of draws: " << roles - playerwins - botwins - 3 << endl <<  "Bot win ratio: " << botwins / (roles - 3) << endl << "Player win ratio: " << playerwins / (roles - 3); 
+    cout << "Bot wins: " << botwins << endl << "Player wins: " << playerwins << endl << "Total games: " << roles - 3 << endl << "Number of draws: " << roles - playerwins - botwins - 3 << endl;
+    cout << "Bot win ratio: " << botwins / (roles - 3) << endl << "Player win ratio: " << playerwins / (roles - 3) << endl << "Draw ratio: " << (roles - playerwins - botwins - 3) / (roles - 3); 
     return 0;
 }
