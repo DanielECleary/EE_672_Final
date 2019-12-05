@@ -189,9 +189,9 @@ int main(){
             probchoice = probability();
             strathistory[1] = strathistory[0];
             strathistory[0] = probchoice;
-            rchance = (rock + rmod) / (roles + rmod);
-            pchance = (paper + pmod) / (roles + pmod);
-            schance = (scissors + smod) / (roles + smod);
+            rchance = (rock + rmod) / (roles + rmod + pmod + smod);
+            pchance = (paper + pmod) / (roles + rmod + pmod + smod);
+            schance = (scissors + smod) / (roles + rmod + pmod + smod);
             // bot choices
             if (probchoice > 0.0 && probchoice <= rchance){ // player has increased chance for rock, pick paper
                 botchoice = "p";
